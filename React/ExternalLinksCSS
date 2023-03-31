@@ -1,0 +1,18 @@
+button.btn-exlinks {
+  float: inline-end;
+  width: auto;
+  height: auto;
+}
+.links-display {
+  width: 70%;
+}
+.links-form {
+  width: 29%;
+  position: sticky;
+  height: 200px;
+}
+.links-logo {
+  height: 50px;
+  width: 50px;
+  float: left;
+}
