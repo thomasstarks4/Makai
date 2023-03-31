@@ -10,7 +10,7 @@ GO
 
 
 ALTER PROC [dbo].[ExternalLinks_Select_ByCreatedBy]
-								@Id int 
+					@Id int 
 
 AS
 
