@@ -1,1 +1,1 @@
-# Makai
+At Makai Rental Solutions, we seek to provide a streamlined self-service rental process that users can navigate without the need of on-site staff. The individual location owners are able to manage stand conditions and revenue offsite. Makai is an MVP and due to the proprietary nature of the code I can only provide snippets of my code. This repository contains SQL, .NET, and React. 
