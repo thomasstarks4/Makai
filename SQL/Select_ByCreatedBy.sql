@@ -18,7 +18,7 @@ AS
 -- =============================================
 -- Author:		Starks, Thomas
 -- Create date: 28FEB23
--- Description:	Selects all ExternalLinks by the User that created them.
+-- Description:	Selects all ExternalLinks by the User specified.
 --				
 
 -- MODIFIED BY: Author
