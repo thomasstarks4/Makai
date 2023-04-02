@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./ELinks.css";
+import "./externallinks.css";
 import facebookLogo from "../../assets/img/logos/facebook.png";
 import instagramLogo from "../../assets/img/logos/instagram.jpg";
 import linkedInLogo from "../../assets/img/logos/linkedin.png";
@@ -38,27 +38,26 @@ function ELinkCard(props) {
     });
   };
   //#region setting the correct logo based on the urlType's name
+
   let image = null;
-  if (props?.link?.urlType?.name === "Facebook" || props.link.urlTypeId === 1) {
-    image = facebookLogo;
-  } else if (
-    props?.link?.urlType?.name === "Instagram" ||
-    props.link.urlTypeId === 2
-  ) {
-    image = instagramLogo;
-  } else if (
-    props?.link?.urlType?.name === "LinkedIn" ||
-    props.link.urlTypeId === 3
-  ) {
-    image = linkedInLogo;
-  } else if (
-    props?.link?.urlType?.name === "Twitter" ||
-    props.link.urlTypeId === 4
-  ) {
-    image = twitterLogo;
-  } else {
-    image = siteLogo;
+  switch (props?.link?.urlType?.name) {
+    case "Facebook":
+      image = facebookLogo;
+      break;
+    case "Instagram":
+      image = instagramLogo;
+      break;
+    case "LinkedIn":
+      image = linkedInLogo;
+      break;
+    case "Twitter":
+      image = twitterLogo;
+      break;
+    case "Site":
+      image = siteLogo;
+      break;
   }
+
   //#endregion
   return (
     <div className="col-12">
@@ -96,18 +95,17 @@ ELinkCard.propTypes = {
   link: PropTypes.shape({
     id: PropTypes.number.isRequired,
     urlType: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-    }),
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired,
     entityType: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-    }),
-    urlTypeId: PropTypes.number,
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired,
     url: PropTypes.string.isRequired,
-  }),
-  handleEdit: PropTypes.func,
-  handleDelete: PropTypes.func,
-};
+  }).isRequired,
+  handleEdit: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+}.isRequired;
 
 export default React.memo(ELinkCard);
