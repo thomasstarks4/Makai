@@ -9,8 +9,7 @@ import lookUpService from "services/lookUpService";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import ELinkCard from "./ELinkCard";
-import "./ELinks.css";
-import ELinksOptions from "./ELinksOptions";
+import "./externallinks.css";
 
 const _logger = debug.extend("MainExLinkLogger");
 function ExternalLinks() {
@@ -43,7 +42,7 @@ function ExternalLinks() {
     editMode: false,
     linkSelected: 0,
   });
-
+  //Needed for conditional rendering of Update button.
   const linkFormClear = () => {
     setSelected((prevState) => {
       const selectedStatus = { ...prevState };
@@ -73,7 +72,10 @@ function ExternalLinks() {
       .LookUp(["UrlTypes", "EntityTypes"])
       .then(onGetLookUpSuccess)
       .catch(onGetLookUpError);
-    externalLinkService.Get().then(onGetLinksSuccess).catch(onGetLinksError);
+    externalLinkService
+      .getLinks()
+      .then(onGetLinksSuccess)
+      .catch(onGetLinksError);
   }, []);
 
   const onGetLookUpSuccess = (response) => {
@@ -81,19 +83,19 @@ function ExternalLinks() {
       const lookups = { ...prevState };
       lookups.entityTypes = response.item.entityTypes;
       lookups.urlTypes = response.item.urlTypes;
-      _logger(lookups);
       return lookups;
     });
-    _logger(lookUpReturns);
   };
-
   const onGetLookUpError = (error) => {
     _logger(error);
   };
 
   const mapUrlType = (urlType) => {
+    let r = (Math.random() + 1).toString(36).substring(7);
     return (
-      <ELinksOptions urlType={urlType} key={******PROPRIETARY CODE******} />
+      <option key={************>
+        {urlType.name}
+      </option>
     );
   };
 
@@ -122,7 +124,7 @@ function ExternalLinks() {
     return (
       <ELinkCard
         link={aLink}
-        key={******PROPRIETARY CODE******}
+        key={**************}
         handleEdit={onLinkSelected}
         handleDelete={onLinkDeleteRequested}
       />
@@ -130,7 +132,6 @@ function ExternalLinks() {
   };
 
   const onLinkSelected = (thisLink) => {
-    _logger("Edit this: ", thisLink);
     const id = thisLink.id;
     setSelected((prevState) => {
       const ls = { ...prevState };
@@ -138,7 +139,6 @@ function ExternalLinks() {
       ls.editMode = true;
       return ls;
     });
-
     setExLinkFormData((prevState) => {
       const newState = { ...prevState };
       newState.url = thisLink.url;
@@ -157,11 +157,37 @@ function ExternalLinks() {
     }).showToast();
     const updateId = selected.linkSelected;
     externalLinkService
-      .GetByExLinkId(updateId)
-      .then(onDeleteSuccess(updateId, "update"))
-      .then(addCreatedToDOMSuccess)
+      .getByExLinkId(updateId)
+      .then(updateDOM)
+      .then(removePrevValues(updateId))
       .catch(addCreatedToDOMError);
     _logger(response);
+  };
+
+  const removePrevValues = (id) => {
+    setExLinks((prevState) => {
+      const linksOnPage = { ...prevState };
+      linksOnPage.arrayOfLinks = [...linksOnPage.arrayOfLinks];
+      linksOnPage.mappedLinks = [...linksOnPage.mappedLinks];
+      const idxOf = linksOnPage.arrayOfLinks.findIndex((link) => {
+        let result = false;
+        if (link.id === id) {
+          result = true;
+        }
+        return result;
+      });
+      if (idxOf >= 0) {
+        linksOnPage.arrayOfLinks.splice(idxOf, 1);
+        linksOnPage.mappedLinks = linksOnPage.arrayOfLinks.map(mapALink);
+      }
+      return linksOnPage;
+    });
+    setSelected((prevState) => {
+      const selectedStatus = { ...prevState };
+      selectedStatus.editMode = false;
+      selectedStatus.linkSelected = 0;
+      return selectedStatus;
+    });
   };
 
   const onUpdateError = (error) => {
@@ -177,7 +203,7 @@ function ExternalLinks() {
 
   const onLinkDeleteRequested = (id) => {
     const deleteFromDOM = onDeleteSuccess(id);
-    externalLinkService.Delete(id).then(deleteFromDOM).catch(onDeleteError);
+    externalLinkService.deleteLink(id).then(deleteFromDOM).catch(onDeleteError);
   };
 
   const onDeleteSuccess = (id, message) => {
@@ -202,7 +228,6 @@ function ExternalLinks() {
         return result;
       });
       if (idxOf >= 0) {
-        _logger(linksOnPage);
         linksOnPage.arrayOfLinks.splice(idxOf, 1);
         linksOnPage.mappedLinks = linksOnPage.arrayOfLinks.map(mapALink);
       }
@@ -224,7 +249,7 @@ function ExternalLinks() {
         background: "linear-gradient(to right, #B00000, #B00000)",
       },
     }).showToast();
-    _logger(response);
+    _logger(error);
   };
 
   const onFormSubmit = (values, formik) => {
@@ -237,17 +262,15 @@ function ExternalLinks() {
     const id = selected.linkSelected;
     if (selected.editMode === false && id === 0) {
       externalLinkService
-        .Add(payload)
+        .addLink(payload)
         .then(onFormSubmitSuccess)
         .catch(onFormSubmitError);
     } else if (selected.editMode === true && id >= 1) {
       payload.id = id;
       externalLinkService
-        .Update(id, payload)
+        .updateLink(id, payload)
         .then(onUpdateSuccess)
         .catch(onUpdateError);
-    } else {
-      return _logger("an error has occurred.");
     }
     formik.resetForm();
   };
@@ -268,12 +291,12 @@ function ExternalLinks() {
       return em;
     });
     externalLinkService
-      .GetByExLinkId(id)
-      .then(addCreatedToDOMSuccess)
+      .getByExLinkId(id)
+      .then(updateDOM)
       .catch(addCreatedToDOMError);
   };
 
-  const addCreatedToDOMSuccess = (response) => {
+  const updateDOM = (response) => {
     let link = response.item;
     setExLinks((prevState) => {
       const el = { ...prevState };
