@@ -93,7 +93,7 @@ function ExternalLinks() {
   const mapUrlType = (urlType) => {
     let r = (Math.random() + 1).toString(36).substring(7);
     return (
-      <option key={************>
+      <option key={************} value={urlType.id}>
         {urlType.name}
       </option>
     );
@@ -124,7 +124,7 @@ function ExternalLinks() {
     return (
       <ELinkCard
         link={aLink}
-        key={**************}
+        key={**************}}
         handleEdit={onLinkSelected}
         handleDelete={onLinkDeleteRequested}
       />
@@ -351,7 +351,7 @@ function ExternalLinks() {
                 <div className="card-body text-white bg-dark pb-0">
                   <div className="mb-3">
                     <label className="form-label" htmlFor="urlTypeId">
-                      Url Type
+                      URL Type
                     </label>
                     <ErrorMessage
                       name="urlTypeId"
@@ -364,11 +364,11 @@ function ExternalLinks() {
                       name="urlTypeId"
                       id="urlTypeId"
                     >
-                      <option value="">Select an url type</option>
+                      <option value="">Select a URL type</option>
                       {lookUpReturns.urlTypes.map(mapUrlType)}
                     </Field>
                     <label className="form-label" htmlFor="url">
-                      Url
+                      URL
                     </label>
                     <ErrorMessage
                       name="url"
