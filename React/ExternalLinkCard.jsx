@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./externallinks.css";
 import facebookLogo from "../../assets/img/logos/facebook.png";
-import instagramLogo from "../../assets/img/logos/instagram.jpg";
+import instagramLogo from "../../assets/img/logos/instagram.png";
 import linkedInLogo from "../../assets/img/logos/linkedin.png";
 import twitterLogo from "../../assets/img/logos/twitter.png";
 import siteLogo from "../../assets/img/logos/site.png";
@@ -37,8 +37,8 @@ function ELinkCard(props) {
       }
     });
   };
-  //#region setting the correct logo based on the urlType's name
 
+  //#region setting the correct logo based on the urlType's name
   let image = null;
   switch (props?.link?.urlType?.name) {
     case "Facebook":
@@ -68,7 +68,7 @@ function ELinkCard(props) {
         <div className="w-50 text-white text-wrap">
           <br />
           <a rel="noreferrer" target="_blank" href={thisLink.url}>
-            {props.link.url}
+            {thisLink.url}
           </a>
         </div>
         <div>
