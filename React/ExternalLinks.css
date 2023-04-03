@@ -4,12 +4,14 @@ button.btn-exlinks {
   height: auto;
 }
 .links-display {
-  width: 70%;
+  min-width: 50%;
+  max-width: 70%;
 }
 .links-form {
-  width: 29%;
-  position: sticky;
-  height: 200px;
+  width: 25%;
+  position: fixed;
+  left: 65%;
+  margin-left: 100px;
 }
 .links-logo {
   height: 50px;
